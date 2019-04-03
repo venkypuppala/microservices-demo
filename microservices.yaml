@@ -18,7 +18,7 @@ spec:
         run: apache
     spec:
       containers:
-      - image: docker.io/ewolff/microservice-kubernetes-demo-apache:latest
+      - image: gcr.io/venky-cicd/apache:0.0.1
         name: apache
         ports:
         - containerPort: 80
@@ -47,7 +47,7 @@ spec:
         run: catalog
     spec:
       containers:
-      - image: docker.io/ewolff/microservice-kubernetes-demo-catalog:latest
+      - image: gcr.io/venky-cicd/catalog:0.0.1
         name: catalog
         ports:
         - containerPort: 8080
@@ -76,7 +76,7 @@ spec:
         run: customer
     spec:
       containers:
-      - image: docker.io/ewolff/microservice-kubernetes-demo-customer:latest
+      - image: gcr.io/venky-cicd/customer:0.0.1
         name: customer
         ports:
         - containerPort: 8080
@@ -105,7 +105,7 @@ spec:
         run: order
     spec:
       containers:
-      - image: docker.io/ewolff/microservice-kubernetes-demo-order:latest
+      - image: gcr.io/venky-cicd/order:latest
         name: order
         ports:
         - containerPort: 8080
