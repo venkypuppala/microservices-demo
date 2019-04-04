@@ -94,9 +94,12 @@ spec:
     stage('Deploy to Dev') {
         steps {
             container('gcloud') {
-                sh "gcloud container clusters get-credentials devcluster --zone us-west1-a"
+                sh "gcloud container clusters list"
+                sh "gcloud container clusters get-credentials devcluster --zone us-west1-a --project venky-cicd"
             }
             container('kubectl') {
+                sh "gcloud container clusters get-credentials devcluster --zone us-west1-a --project venky-cicd"
+                sh "kubectl config get-clusters"
                 sh "kubectl apply -f microservices.yaml"
             }
         }
