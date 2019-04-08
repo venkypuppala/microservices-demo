@@ -38,7 +38,7 @@ spec:
 }
   }
   stages {
-    stage('Checkout') {
+    /*stage('Checkout') {
       steps {
           git(
               url: 'https://github.com/venkypuppala/microservices-demo.git',
@@ -46,7 +46,7 @@ spec:
               branch: "master"
             )
         }
-    }
+    }*/
     stage('Build and Test') {
       steps {
         container('maven') {
