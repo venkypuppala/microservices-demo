@@ -40,8 +40,10 @@ spec:
   }
   stages {
     stage('Setup') {
+      steps {
       // checkout code from scm i.e. commits related to the PR
       checkout scm
+      }
     }
     stage('Build and Test') {
       steps {
