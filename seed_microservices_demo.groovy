@@ -1,7 +1,7 @@
 PROJECT_NAME = 'microservices-demo'
 ORG = 'venkypuppala'
 
-PROJECT_URL = "https://github.com/venkypuppala/microservices-demo"
+PROJECT_URL = "https://github.com/${ORG}/${PROJECT_NAME}"
 GIT_URL = "${PROJECT_URL}.git"
 
 // Read List of github_admins into ArrayList
