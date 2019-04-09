@@ -22,7 +22,7 @@ pipelineJob(PROJECT_NAME) {
         stringParam('ZONE', 'us-west1-a', 'The Zone to build the test cluster in')
         stringParam('PROJECT_ID', 'venky-cicd', 'The Project to build the test cluster in')
         stringParam('REGION', 'us-west1', 'The Region to build the test cluster in')
-        stringParam('sha1' 'master', '')
+        stringParam('sha1', 'master', '')
     }
 
     Triggers {
