@@ -86,6 +86,8 @@ spec:
     stage('Deploy to Dev') {
         steps {
           container('gcloud') {
+              // Delete
+              sh "gcloud container clusters delete devcluster1 --zone env.${ZONE}"
               sh "gcloud container clusters create devcluster1 --zone env.${ZONE}"
               sh "gcloud container clusters list"
           }
