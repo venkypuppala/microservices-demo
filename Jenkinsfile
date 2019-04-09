@@ -1,5 +1,5 @@
 def  SONAR_URL = "http://104.196.201.144:9000"
-def  VERSION = "0.0.env.${ghprbPullId}"
+def  VERSION = "0.0.${ghprbPullId}"
 def  apacheimageTag = "gcr.io/env.${PROJECT_ID}/apache:${VERSION}"
 def  catalogimageTag = "gcr.io/env.${PROJECT_ID}/catalog:${VERSION}"
 def  customerimageTag = "gcr.io/env.${PROJECT_ID}/customer:${VERSION}"
