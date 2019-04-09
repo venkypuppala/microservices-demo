@@ -8,7 +8,7 @@ GIT_URL = "${PROJECT_URL}.git"
 
 // Read list of github_admins into an ArrayList
 def ADMINS = []
-new File('github_admins' ).eachLine { line ->
+new File(WORKSPACE + 'github_admins').eachLine { line ->
     ADMINS << line
 }
 
