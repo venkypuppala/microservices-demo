@@ -1,4 +1,4 @@
-def project = 'venky-cicd'
+def  SONAR_URL = "http://104.196.201.144:9000"
 def  apacheimageTag = "gcr.io/${project}/apache:0.0.1"
 def  catalogimageTag = "gcr.io/${project}/catalog:0.0.1"
 def  customerimageTag = "gcr.io/${project}/customer:0.0.1"
@@ -38,19 +38,16 @@ spec:
 }
   }
   stages {
-    /*stage('Checkout') {
-      steps {
-          git(
-              url: 'https://github.com/venkypuppala/microservices-demo.git',
-              credentialsId: 'github',
-              branch: "master"
-            )
-        }
-    }*/
+    stage('Setup') {
+      // checkout code from scm i.e. commits related to the PR
+      checkout scm
+    }
     stage('Build and Test') {
       steps {
         container('maven') {
           sh """
+            echo "${ghprbPullId}"
+            echo "${sha1}"
             mvn clean package
           """
         }
@@ -60,7 +57,7 @@ spec:
       steps {
         container('maven') {
           sh """
-            mvn sonar:sonar -Dsonar.host.url=http://104.196.201.144:9000
+            mvn sonar:sonar -Dsonar.host.url=${SONAR_URL}
           """
         }
       }
@@ -86,24 +83,21 @@ spec:
     }
     stage('create dev cluster') {
         steps {
-            container('gcloud') {
-                sh "gcloud container clusters create devcluster1 --zone us-west1-a"
-                sh "gcloud container clusters list"
-            }
+
         }
     }
     stage('Deploy to Dev') {
         steps {
-            /*container('gcloud') {
-                sh "gcloud container clusters list"
-                sh "gcloud container clusters get-credentials devcluster --zone us-west1-a --project venky-cicd"
-            }*/
-            container('kubectl') {
-                sh "gcloud container clusters get-credentials devcluster1 --zone us-west1-a --project venky-cicd"
-                sh "kubectl config get-clusters"
-                sh "kubectl apply -f microservices.yaml"
-            }
+          container('gcloud') {
+              sh "gcloud container clusters create devcluster1 --zone env.${ZONE}"
+              sh "gcloud container clusters list"
+          }
+          container('kubectl') {
+              sh "gcloud container clusters get-credentials devcluster1 --zone env.${ZONE} --project env.${PROJECT_ID}"
+              sh "kubectl config get-clusters"
+              sh "kubectl apply -f microservices.yaml"
         }
+      }
     }
   }
 }
