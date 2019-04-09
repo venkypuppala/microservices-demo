@@ -49,7 +49,6 @@ pipelineJob(PROJECT_NAME) {
                       wipeOutWorkspace()
                     }
                 }
-
             }
         }
     }

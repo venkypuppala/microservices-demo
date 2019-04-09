@@ -1,8 +1,9 @@
 def  SONAR_URL = "http://104.196.201.144:9000"
-def  apacheimageTag = "gcr.io/${project}/apache:0.0.1"
-def  catalogimageTag = "gcr.io/${project}/catalog:0.0.1"
-def  customerimageTag = "gcr.io/${project}/customer:0.0.1"
-def  orderimageTag = "gcr.io/${project}/order:0.0.1"
+def  VERSION = "0.0.env.${ghprbPullId}"
+def  apacheimageTag = "gcr.io/env.${PROJECT_ID}/apache:${VERSION}"
+def  catalogimageTag = "gcr.io/env.${PROJECT_ID}/catalog:${VERSION}"
+def  customerimageTag = "gcr.io/env.${PROJECT_ID}/customer:${VERSION}"
+def  orderimageTag = "gcr.io/env.${PROJECT_ID}/order:${VERSION}"
 
 pipeline {
   agent {
@@ -47,7 +48,6 @@ spec:
         container('maven') {
           sh """
             echo "${ghprbPullId}"
-            echo "${sha1}"
             mvn clean package
           """
         }
@@ -80,11 +80,6 @@ spec:
               sh "PYTHONUNBUFFERED=1 gcloud builds submit -t ${orderimageTag} ./microservice-kubernetes-demo-order"
           }
       }
-    }
-    stage('create dev cluster') {
-        steps {
-
-        }
     }
     stage('Deploy to Dev') {
         steps {
