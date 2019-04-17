@@ -3,9 +3,13 @@ PROJECT_NAME = 'BQConsumer'
 PROJECT_URL = "https://panwgithub.paloaltonetworks.local/IT-BI/${PROJECT_NAME}"
 GIT_URL = "${PROJECT_URL}.git"
 
+// Read list of github_admins into an ArrayList
+def ADMINS = ['venkypuppala']
+
 // Creates a pipelineJob for BQProducer
 pipelineJob(PROJECT_NAME) {
-    //
+
+    // You don't need to change this
     properties {
         githubProjectUrl(PROJECT_URL)
     }
@@ -23,7 +27,7 @@ pipelineJob(PROJECT_NAME) {
         githubPullRequest {
             useGitHubHooks()
             orgWhitelist(ORG)
-            //admins(ADMINS)
+            admins(ADMINS)
         }
     }
     definition {
