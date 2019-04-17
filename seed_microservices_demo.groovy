@@ -7,7 +7,7 @@ PROJECT_URL = "https://github.com/${ORG}/${PROJECT_NAME}"
 GIT_URL = "${PROJECT_URL}.git"
 
 // Read list of github_admins into an ArrayList
-def ADMINS = ['venkypuppala']
+def ADMINS = ['venkypuppala','vpuppala']
 
 pipelineJob(PROJECT_NAME) {
 
@@ -22,7 +22,8 @@ pipelineJob(PROJECT_NAME) {
         stringParam('ZONE', 'us-west1-a', 'The zone to build the test cluster in')
         stringParam('PROJECT_ID', 'venky-cicd', 'The project to build the test cluster in')
         stringParam('REGION', 'us-west1', 'The region to build the test cluster in')
-        stringParam('sha1', 'master', '')
+        stringParam('sha1', 'master', 'I clone which branch')
+        stringParam('ENV', 'dev', 'I deploy where')
     }
 
     // You don't need to change this
