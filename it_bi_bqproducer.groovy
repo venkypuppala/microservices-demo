@@ -1,12 +1,14 @@
-PROJECT_NAME = 'BQProducer'
+// Change this
+PROJECT_NAME = 'BQConsumer'
 ORG = 'IT-BI'
-PROJECT_URL = "https://panwgithub.paloaltonetworks.local/IT-BI/${PROJECT_NAME}"
+
+// You don't need to change these
+PROJECT_URL = "https://github.com/${ORG}/${PROJECT_NAME}"
 GIT_URL = "${PROJECT_URL}.git"
 
 // Read list of github_admins into an ArrayList
 def ADMINS = ['venkypuppala']
 
-// Creates a pipelineJob for BQProducer
 pipelineJob(PROJECT_NAME) {
 
     // You don't need to change this
@@ -14,30 +16,37 @@ pipelineJob(PROJECT_NAME) {
         githubProjectUrl(PROJECT_URL)
     }
 
+    // Change these for your pipelines requirements
     parameters {
         // parameter, default value, description
-        stringParam('ZONE', 'us-west1-a', 'The Zone to build the test cluster in')
-        stringParam('PROJECT_ID', 'itd-aia-demo-ps2', 'The Project to build the test cluster in')
-        stringParam('REGION', 'us-west1', 'The Region to build the test cluster in')
-        stringParam('sha1', 'master', 'The default branch to trigger when not a pull request')
-        stringParam('DEPLOY_TO_ENV', 'dev', 'Which environment do i deploy to')
+        stringParam('ZONE', 'us-west1-a', 'The zone to build the test cluster in')
+        stringParam('PROJECT_ID', 'venky-cicd', 'The project to build the test cluster in')
+        stringParam('REGION', 'us-west1', 'The region to build the test cluster in')
+        stringParam('sha1', 'master', '')
     }
 
-    Triggers {
+    // You don't need to change this
+    triggers {
         githubPullRequest {
             useGitHubHooks()
             orgWhitelist(ORG)
             admins(ADMINS)
         }
     }
+
+    // You don't need to change this
     definition {
         cpsScm {
             scm {
-                branch('${sha1}')
-                remote{
-                    name {
-                    refspec('+refs/pull/${ghprbPullId}/*:refs/remotes/origin/pr/${ghprbPullId}/*')
-                    url(GIT_URL)
+                git {
+                    branch('${sha1}')
+                    remote {
+                        name('origin')
+                        refspec('+refs/pull/${ghprbPullId}/*:refs/remotes/origin/pr/${ghprbPullId}/*')
+                        url(GIT_URL)
+                    }
+                    extensions {
+                      wipeOutWorkspace()
                     }
                 }
             }
