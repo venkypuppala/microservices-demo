@@ -1,9 +1,9 @@
 // Change this
-PROJECT_NAME = 'BQConsumer'
+PROJECT_NAME = 'BQProducer'
 ORG = 'IT-BI'
 
 // You don't need to change these
-PROJECT_URL = "https://github.com/${ORG}/${PROJECT_NAME}"
+PROJECT_URL = "https://panwgithub.paloaltonetworks.local/${ORG}/${PROJECT_NAME}"
 GIT_URL = "${PROJECT_URL}.git"
 
 // Read list of github_admins into an ArrayList
