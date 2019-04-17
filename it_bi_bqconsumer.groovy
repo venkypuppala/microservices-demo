@@ -16,7 +16,7 @@ pipelineJob(PROJECT_NAME) {
         stringParam('PROJECT_ID', 'itd-aia-demo-ps2', 'The Project to build the test cluster in')
         stringParam('REGION', 'us-west1', 'The Region to build the test cluster in')
         stringParam('sha1', 'master', 'The default branch to trigger when not a pull request')
-        stringParam('DEPLOY_TO_ENV', 'dev' 'Which environment do i deploy to')
+        stringParam('DEPLOY_TO_ENV', 'dev', 'Which environment do i deploy to')
     }
 
     Triggers {
