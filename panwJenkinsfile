@@ -1,0 +1,80 @@
+#!/usr/bin/env groovy
+
+//Change these accordingly
+def label = "slave"
+def ghprbPullId = 1
+def SONAR_URL = "http://104.196.201.144:9000"
+def DOCKER_REGISTRY_URL = "gcr.io/venky-cicd/"
+
+podTemplate(
+        label: label,
+        containers: [
+                containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
+                containerTemplate(name: 'nodejs', image: 'node:10', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'python3', image: 'gcr.io/venky-cicd/python3', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'gcloud', image: 'gcr.io/venky-cicd/gcloud', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'kubectl', image: 'gcr.io/venky-cicd/kubectl', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'terraform', image: 'gcr.io/venky-cicd/terraform', command: 'cat', ttyEnabled: true)],
+        volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
+    node(label) {
+        // Checkout the commits related to this PR
+        stage ('Checkout') {
+            //checkout scm
+            }
+        }
+        // Do a normal build on the project without tests
+        stage ('Build Project') {
+            container('maven') {
+                sh """
+                mvn clean install -DskipTests
+                """
+            }
+        }
+        // Run unit tests on the project
+        stage ('Run Unit Tests') {
+            container('maven') {
+                sh """
+                mvn test
+                """
+            }
+        }
+        stage ('Run static Analysis') {
+            container('maven') {
+                sh """
+                mvn sonar:sonar -Dsonar.host.url=${SONAR_URL}
+                """
+            }
+        }
+        stage ('Run jacoco') {
+            container('maven') {
+                jacoco()
+            }
+        }
+        stage ('Build Image and push') {
+            container('docker') {
+                sh """
+                docker build -t ${DOCKER_REGISTRY_URL}/bqconsuer/pr/pr${ghprbPullId} .
+                docker push ${DOCKER_REGISTRY_URL}/bqconsuer/pr/pr${ghprbPullId}
+                """
+            }
+        }
+        post {
+          always {
+            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            junit 'target/**/*.xml'
+          }
+      }
+
+    node(label){
+        stage ('Deploy') {
+            container('kubectl') {
+                sh """
+                kubectl apply -f manifests/
+                """
+            }
+        }
+    }
+
+    }
+}
